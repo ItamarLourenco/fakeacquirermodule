@@ -28,16 +28,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class FakeAcquirerSuccessActivity : ComponentActivity(){
+class FakeAcquirerSuccessActivity : FakeAcquirerActivityBase(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
             delay(2000)
-            setResult(Activity.RESULT_OK,
-                Intent().putExtra("result",
-                    FakeAcquirerResponse(1.0f, StatusTransaction.SUCCESS)
-                )
+            FakeAcquirerApplication.callback.transactionSuccess(
+                FakeAcquirerResponse(1.0f, StatusTransaction.SUCCESS)
             )
             finish()
         }

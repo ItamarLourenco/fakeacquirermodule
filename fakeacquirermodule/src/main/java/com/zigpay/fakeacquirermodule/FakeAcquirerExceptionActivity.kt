@@ -28,16 +28,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
+class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
             delay(2000)
-            FakeAcquirerApplication.callback.transactionFailed(
-                FakeAcquirerResponse(1.0f, StatusTransaction.FAILED)
-            )
-            finish()
+            throw Exception("Ocorreu um apartada - Exception!")
         }
 
         setContent {
@@ -46,7 +43,7 @@ class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    InitViewFailed()
+                    InitViewException()
                 }
             }
         }
@@ -55,7 +52,7 @@ class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
 
 
 @Composable
-fun InitViewFailed() {
+fun InitViewException() {
     val context: Context = LocalContext.current
     Column(
         modifier = Modifier
@@ -65,7 +62,7 @@ fun InitViewFailed() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com erro", color = Color.Red)
+            Text(text = "Simulando transação com Exception", color = Color.Red)
         }
     }
 }

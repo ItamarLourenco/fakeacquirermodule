@@ -1,29 +1,17 @@
 package com.zigpay.fakeacquirermodule
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import java.io.Serializable
 
-class FakeAcquirerSdk(val activity: ComponentActivity) {
-    var resultLauncher: ActivityResultLauncher<Intent>
-    lateinit var callback: FakeAcquirerCallback
+class FakeAcquirerSdk(val context: Context): Serializable {
 
-    init {
-        resultLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            result.data?.let {
-                val data = FakeAcquirerResponse.getData(it)
-                when (data?.status){
-                    StatusTransaction.SUCCESS -> callback.transactionSuccess(data)
-                    StatusTransaction.FAILED -> callback.transactionFailed(data)
-                    else -> callback.transactionFailed(data)
-                }
-            }
-        }
-    }
-
-    fun makeTransaction() {
-        val intent = Intent(activity, FakeAcquirerActivity::class.java)
-        resultLauncher.launch(intent)
+    fun makeTransaction(callback: FakeAcquirerCallback) {
+        FakeAcquirerApplication.callback = callback
+        val intent = Intent(context, FakeAcquirerActivity::class.java)
+        context.startActivity(intent)
     }
 }
