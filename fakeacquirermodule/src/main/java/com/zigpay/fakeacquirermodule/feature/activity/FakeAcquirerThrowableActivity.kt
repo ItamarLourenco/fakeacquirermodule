@@ -1,10 +1,7 @@
-package com.zigpay.fakeacquirermodule
+package com.zigpay.fakeacquirermodule.feature.activity
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,30 +11,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import com.zigpay.fakeacquirermodule.ui.theme.FakeAcquirerProjectTheme
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.zigpay.fakeacquirermodule.application.FakeAcquirerActivityBase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
+class FakeAcquirerThrowableActivity : FakeAcquirerActivityBase(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
             delay(2000)
-            FakeAcquirerApplication.callback.transactionFailed(
-                FakeAcquirerResponse(1.0f, StatusTransaction.FAILED)
-            )
-            finish()
+            throw Throwable("Ocorreu um apartada - Throwable!")
         }
 
         setContent {
@@ -46,7 +35,7 @@ class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    InitViewFailed()
+                    InitViewThrowable()
                 }
             }
         }
@@ -55,7 +44,7 @@ class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
 
 
 @Composable
-fun InitViewFailed() {
+fun InitViewThrowable() {
     val context: Context = LocalContext.current
     Column(
         modifier = Modifier
@@ -65,7 +54,7 @@ fun InitViewFailed() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com erro", color = Color.Red)
+            Text(text = "Simulando transação com Throwable", color = Color.Red)
         }
     }
 }

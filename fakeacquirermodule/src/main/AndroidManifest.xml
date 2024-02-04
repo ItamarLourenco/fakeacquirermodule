@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name=".FakeAcquirerApplication">
-        <activity android:name=".FakeAcquirerFailedActivity" />
-        <activity android:name=".FakeAcquirerSuccessActivity" />
-        <activity android:name=".FakeAcquirerExceptionActivity" />
-        <activity android:name=".FakeAcquirerThrowableActivity" />
+    <application android:name=".application.FakeAcquirerApplication">
+        <activity android:name=".feature.activity.FakeAcquirerFailedActivity" />
+        <activity android:name=".feature.activity.FakeAcquirerSuccessActivity" />
+        <activity android:name=".feature.activity.FakeAcquirerExceptionActivity" />
+        <activity android:name=".feature.activity.FakeAcquirerThrowableActivity" />
 
         <activity
-            android:name=".FakeAcquirerActivity"
+            android:name=".feature.activity.FakeAcquirerActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
