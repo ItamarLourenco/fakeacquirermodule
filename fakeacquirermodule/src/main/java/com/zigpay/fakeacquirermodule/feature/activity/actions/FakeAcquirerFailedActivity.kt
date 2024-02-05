@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
-import com.zigpay.fakeacquirermodule.domain.model.StatusTransaction
+import com.zigpay.fakeacquirermodule.domain.model.ActionTransaction
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivityBase
 import com.zigpay.fakeacquirermodule.ui.theme.FakeAcquirerProjectTheme
 import kotlinx.coroutines.MainScope
@@ -30,7 +30,7 @@ class FakeAcquirerFailedActivity : FakeAcquirerActivityBase(){
         MainScope().launch {
             delay(2000)
             val fakeTransaction = getFakeTransaction()
-            fakeTransaction.status = StatusTransaction.FAILED
+            fakeTransaction.action = ActionTransaction.FAILED
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
             finish()
