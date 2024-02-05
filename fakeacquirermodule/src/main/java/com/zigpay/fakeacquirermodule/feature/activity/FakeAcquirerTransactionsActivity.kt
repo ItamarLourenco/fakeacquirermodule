@@ -48,6 +48,8 @@ import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerWithou
 import com.zigpay.fakeacquirermodule.feature.viewmodel.FakeTransactionsViewModel
 import com.zigpay.fakeacquirermodule.ui.theme.FakeAcquirerProjectTheme
 import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class FakeAcquirerTransactionsActivity : FakeAcquirerActivityBase(), Serializable {
     companion object {
@@ -63,9 +65,6 @@ class FakeAcquirerTransactionsActivity : FakeAcquirerActivityBase(), Serializabl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        fakeTransactionsViewModel.fakeTransactionList.observe(this, Observer {
-            Log.i("DEBUG", it.toString())
-        })
         fakeTransactionsViewModel.updateFakeTransactionList()
 
         setContent {
@@ -117,9 +116,9 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("Status: ")
+                                append("Valor: ")
                             }
-                            append(fakeTransaction.status.toString())
+                            append(fakeTransaction.price.toString())
                         },
                         fontSize = 12.sp
                     )
@@ -140,6 +139,18 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                                 append("Status: ")
                             }
                             append(fakeTransaction.status.toString())
+                        },
+                        fontSize = 12.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Criando em: ")
+                            }
+                            append(
+                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("pt", "BR")).format(fakeTransaction.created_at)
+                            )
                         },
                         fontSize = 12.sp
                     )

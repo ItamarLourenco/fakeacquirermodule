@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Dao
 interface FakeTransactionDAO {
-    @Query("SELECT * FROM fake_transaction")
+    @Query("SELECT * FROM fake_transaction ORDER BY created_at DESC")
     fun getAll(): List<FakeTransaction>
 
     @Query("SELECT * FROM fake_transaction WHERE uid IN (:uuid)")
