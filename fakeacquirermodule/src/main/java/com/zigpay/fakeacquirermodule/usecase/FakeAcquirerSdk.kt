@@ -4,13 +4,15 @@ import android.content.Context
 import android.content.Intent
 import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerCallback
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.StatusTransaction
+import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivity
 import java.io.Serializable
 
 class FakeAcquirerSdk(val context: Context): Serializable {
-    fun makeTransaction(callback: FakeAcquirerCallback) {
+    fun makeTransaction(price:Float, type: TypeTransaction, callback: FakeAcquirerCallback) {
         FakeAcquirerApplication.callback = callback
-        val intent = Intent(context, FakeAcquirerActivity::class.java)
-        context.startActivity(intent)
+        FakeAcquirerActivity.open(context, price, type);
     }
 }

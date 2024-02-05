@@ -1,4 +1,4 @@
-package com.zigpay.fakeacquirermodule.feature.activity
+package com.zigpay.fakeacquirermodule.feature.activity.actions
 
 import android.content.Context
 import android.os.Bundle
@@ -15,18 +15,22 @@ import com.zigpay.fakeacquirermodule.ui.theme.FakeAcquirerProjectTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
-import com.zigpay.fakeacquirermodule.application.FakeAcquirerActivityBase
+import com.zigpay.fakeacquirermodule.domain.model.StatusTransaction
+import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivityBase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
+class FakeAcquirerWithoutReturnActivity : FakeAcquirerActivityBase(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         MainScope().launch {
             delay(2000)
-            throw Exception("Ocorreu um apartada - Exception!")
+            val fakeTransaction = getFakeTransaction()
+            fakeTransaction.status = StatusTransaction.SUCCESS
+            fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
+            finish()
         }
 
         setContent {
@@ -35,7 +39,7 @@ class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    InitViewException()
+                    InitViewWithoutReturn()
                 }
             }
         }
@@ -44,7 +48,7 @@ class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
 
 
 @Composable
-fun InitViewException() {
+fun InitViewWithoutReturn() {
     val context: Context = LocalContext.current
     Column(
         modifier = Modifier
@@ -54,7 +58,7 @@ fun InitViewException() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com Exception", color = Color.Red)
+            Text(text = "Simulando transação sem retorno", color = Color.Red)
         }
     }
 }

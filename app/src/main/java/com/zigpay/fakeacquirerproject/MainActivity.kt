@@ -1,6 +1,7 @@
 package com.zigpay.fakeacquirerproject
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
 import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerCallback
 import com.zigpay.fakeacquirermodule.usecase.FakeAcquirerSdk
 import com.zigpay.fakeacquirerproject.ui.theme.FakeAcquirerProjectTheme
@@ -58,12 +60,14 @@ class MainActivity : ComponentActivity() {
 
 
     suspend fun makeTransaction(): FakeTransaction? = suspendCancellableCoroutine { continuation ->
-        fakeAcquirerSdk.makeTransaction(object: FakeAcquirerCallback {
+        fakeAcquirerSdk.makeTransaction(200f, TypeTransaction.DEBIT, object: FakeAcquirerCallback {
             override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
+                Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
             }
 
             override fun transactionFailed(fakeAcquirerResponse: FakeTransaction?) {
+                Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
             }
         })
@@ -92,7 +96,7 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
                     .height(80.dp)
                     .padding(16.dp)
             ) {
-                Text(text = "Simular transição com sucesso")
+                Text(text = "Simular transações")
             }
             Text(text = log, textAlign = TextAlign.Center, fontSize = 12.sp)
         }

@@ -1,19 +1,41 @@
 package com.zigpay.fakeacquirermodule.domain.model
 
+import android.os.Parcel
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import java.io.Serializable
+import java.util.Date
 import java.util.UUID
 
 
-class FakeTransaction(val price: Float?,
-                      val status: StatusTransaction?) : Serializable {
+@Entity(tableName = "fake_transaction")
+data class FakeTransaction(
+    @PrimaryKey val uid: UUID = UUID.randomUUID(),
+    @ColumnInfo(name = "price") val price: Float,
+    @ColumnInfo(name = "status") var status: StatusTransaction,
+    @ColumnInfo(name = "type") val type: TypeTransaction,
+    @ColumnInfo(name = "created_at") val created_at: Date,
+    @ColumnInfo(name = "updated_at") val updated_at: Date
+): Serializable {
+    constructor(price: Float, statusTransaction: StatusTransaction, typeTransaction: TypeTransaction) : this(
+        UUID.randomUUID(),
+        price,
+        statusTransaction,
+        typeTransaction,
+        Date(),
+        Date()
+    )
 
-    val id: String = UUID.randomUUID().toString()
-
-    override fun toString(): String {
-        return "FakeAcquirerResponse(" +
-                "id=$id, " +
-                "price=$price, " +
-                "status=$status" + ")"
-    }
-
+    constructor(price: Float, typeTransaction: TypeTransaction) : this(
+        UUID.randomUUID(),
+        price,
+        StatusTransaction.SUCCESS,
+        typeTransaction,
+        Date(),
+        Date()
+    )
 }

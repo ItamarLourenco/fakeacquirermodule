@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:name=".application.FakeAcquirerApplication">
-        <activity android:name=".feature.activity.FakeAcquirerFailedActivity" />
-        <activity android:name=".feature.activity.FakeAcquirerSuccessActivity" />
-        <activity android:name=".feature.activity.FakeAcquirerExceptionActivity" />
-        <activity android:name=".feature.activity.FakeAcquirerThrowableActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerFailedActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerSuccessActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerExceptionActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerThrowableActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerWithoutReturnActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerLockedActivity" />
 
         <activity
             android:name=".feature.activity.FakeAcquirerActivity"

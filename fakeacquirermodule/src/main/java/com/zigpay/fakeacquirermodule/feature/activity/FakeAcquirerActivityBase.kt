@@ -1,0 +1,35 @@
+package com.zigpay.fakeacquirermodule.feature.activity
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import androidx.activity.ComponentActivity
+import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
+import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
+import com.zigpay.fakeacquirermodule.usecase.FakeTransactionUseCase
+
+
+open class FakeAcquirerActivityBase: ComponentActivity() {
+    companion object {
+        fun open(fakeAcquirerActivityBase: FakeAcquirerActivityBase, myClass: Class<out FakeAcquirerActivityBase>, fakeTransaction: FakeTransaction){
+            fakeAcquirerActivityBase.startActivity(
+                Intent(fakeAcquirerActivityBase, myClass).also {
+                    it.putExtra(FakeTransaction::class.java.simpleName, fakeTransaction)
+                }
+            )
+            fakeAcquirerActivityBase.finish()
+        }
+    }
+
+    val fakeTransactionUseCase = FakeTransactionUseCase(
+        FakeTransactionRepository(FakeAcquirerApplication.db.fakeTransactionDAO())
+    )
+
+    fun getFakeTransaction() : FakeTransaction = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        intent.getSerializableExtra(FakeTransaction::class.java.simpleName, FakeTransaction::class.java) ?: FakeTransaction(0f, TypeTransaction.CREDIT)
+    } else {
+        intent.getSerializableExtra(FakeTransaction::class.java.simpleName) as FakeTransaction
+    }
+}

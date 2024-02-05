@@ -1,5 +1,6 @@
 package com.zigpay.fakeacquirermodule.feature.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -7,9 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,11 +26,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.zigpay.fakeacquirermodule.application.FakeAcquirerActivityBase
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerExceptionActivity
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerFailedActivity
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerLockedActivity
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerSuccessActivity
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerThrowableActivity
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerWithoutReturnActivity
 import com.zigpay.fakeacquirermodule.ui.theme.FakeAcquirerProjectTheme
 import java.io.Serializable
 
 class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
+    companion object {
+        fun open(context: Context, price: Float, type: TypeTransaction) {
+            context.startActivity(Intent(context, FakeAcquirerActivity::class.java).also {
+                it.putExtra(FakeTransaction::class.java.simpleName, FakeTransaction(price, type))
+            })
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,32 +62,30 @@ class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
         }
     }
 
-    fun startFakeAcquirerFailedActivity() {
-        startActivity(
-            Intent(this, FakeAcquirerFailedActivity::class.java)
-        )
-        finish()
-    }
+
 
     fun startFakeAcquirerSuccessActivity() {
-        startActivity(
-            Intent(this, FakeAcquirerSuccessActivity::class.java)
-        )
-        finish()
+        open(this, FakeAcquirerSuccessActivity::class.java, getFakeTransaction())
     }
 
-    fun startFakeAcquirerExceptionActivity(){
-        startActivity(
-            Intent(this, FakeAcquirerExceptionActivity::class.java)
-        )
-        finish()
+    fun startFakeAcquirerFailedActivity() {
+        open(this, FakeAcquirerFailedActivity::class.java, getFakeTransaction())
     }
 
-    fun startFakeAcquirerThrowableActivity(){
-        startActivity(
-            Intent(this, FakeAcquirerThrowableActivity::class.java)
-        )
-        finish()
+    fun startFakeAcquirerExceptionActivity() {
+        open(this, FakeAcquirerExceptionActivity::class.java, getFakeTransaction())
+    }
+
+    fun startFakeAcquirerThrowableActivity() {
+        open(this, FakeAcquirerThrowableActivity::class.java, getFakeTransaction())
+    }
+
+    fun startFakeAcquirerWithoutReturnActivity() {
+        open(this, FakeAcquirerWithoutReturnActivity::class.java, getFakeTransaction())
+    }
+
+    fun startFakeAcquirerLockedActivity() {
+        open(this, FakeAcquirerLockedActivity::class.java, getFakeTransaction())
     }
 
 }
@@ -77,61 +94,62 @@ class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
 @Composable
 fun InitView() {
     val fakeAcquirerActivity: FakeAcquirerActivity = LocalContext.current as FakeAcquirerActivity
-    Column(
+
+    data class MyButton(
+        val text: String,
+        val onClick: () -> Unit,
+        val buttonColors: ButtonColors
+    )
+
+    val buttons = listOf(
+        MyButton(
+            "Simular transição com sucesso",
+            { fakeAcquirerActivity.startFakeAcquirerSuccessActivity() },
+            ButtonDefaults.buttonColors()
+        ),
+        MyButton(
+            "Simular transição com erro",
+            { fakeAcquirerActivity.startFakeAcquirerFailedActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+        ),
+        MyButton(
+            "Simulação sem retorno",
+            { fakeAcquirerActivity.startFakeAcquirerWithoutReturnActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+        ),
+        MyButton(
+            "Simulação travado a activity",
+            { fakeAcquirerActivity.startFakeAcquirerLockedActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+        ),
+        MyButton(
+            "Lançar Exception",
+            { fakeAcquirerActivity.startFakeAcquirerExceptionActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.Red)
+        ),
+        MyButton(
+            "Lançar Throwable",
+            { fakeAcquirerActivity.startFakeAcquirerThrowableActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.Red)
+        ),
+    )
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
     ) {
-        Column {
+        items(buttons) { button ->
             Button(
-                modifier = Modifier.padding(8.dp),
-                onClick = {
-                    fakeAcquirerActivity.startFakeAcquirerSuccessActivity()
-                }
+                onClick = button.onClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                colors = button.buttonColors
             ) {
-                Text(text = "Simular transição com sucesso")
+                Text(text = button.text, textAlign = TextAlign.Center)
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                fakeAcquirerActivity.startFakeAcquirerFailedActivity()
-            },
-            modifier = Modifier.padding(8.dp),
-            colors =  ButtonDefaults.buttonColors(
-                containerColor = Color.LightGray
-            ),
-        ) {
-            Text(text = "Simular transição com erro", textAlign = TextAlign.Center)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                fakeAcquirerActivity.startFakeAcquirerExceptionActivity()
-
-            },
-            modifier = Modifier.padding(8.dp),
-            colors =  ButtonDefaults.buttonColors(
-                containerColor = Color.Red
-            ),
-        ) {
-            Text("Lançar Exception", textAlign = TextAlign.Center)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                fakeAcquirerActivity.startFakeAcquirerThrowableActivity()
-            },
-            modifier = Modifier.padding(8.dp),
-            colors =  ButtonDefaults.buttonColors(
-                containerColor = Color.Red
-            ),
-        ) {
-            Text("Lançar Throwable", textAlign = TextAlign.Center)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
