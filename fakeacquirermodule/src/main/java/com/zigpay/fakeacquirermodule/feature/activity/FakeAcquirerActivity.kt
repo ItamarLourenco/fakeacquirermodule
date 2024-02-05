@@ -88,6 +88,10 @@ class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
         open(this, FakeAcquirerLockedActivity::class.java, getFakeTransaction())
     }
 
+    fun startFakeAcquirerTransactionsActivity() {
+        FakeAcquirerTransactionsActivity.open(this)
+    }
+
 }
 
 
@@ -131,6 +135,11 @@ fun InitView() {
             "Lançar Throwable",
             { fakeAcquirerActivity.startFakeAcquirerThrowableActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.Red)
+        ),
+        MyButton(
+            "Ver transações",
+            { fakeAcquirerActivity.startFakeAcquirerTransactionsActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ),
     )
 

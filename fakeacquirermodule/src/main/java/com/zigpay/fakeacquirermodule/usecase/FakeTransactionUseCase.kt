@@ -11,4 +11,8 @@ class FakeTransactionUseCase(private val repository: FakeTransactionRepository) 
             fakeTransaction = fakeTransaction
         )
     }
+
+    fun getAllFakeTransactions(): List<FakeTransaction> {
+        return repository.getAllFakeTransactions()
+    }
 }
