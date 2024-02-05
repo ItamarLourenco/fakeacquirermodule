@@ -6,13 +6,10 @@ import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
 import java.util.UUID
 
 class FakeTransactionUseCase(private val repository: FakeTransactionRepository) {
-    fun saveFakeTransaction(fakeTransaction : FakeTransaction) : FakeTransaction {
-        return repository.saveFakeTransaction(
-            fakeTransaction = fakeTransaction
-        )
-    }
+    fun saveFakeTransaction(fakeTransaction : FakeTransaction) : FakeTransaction = repository.saveFakeTransaction(
+        fakeTransaction = fakeTransaction
+    )
+    fun getAllFakeTransactions(): List<FakeTransaction> = repository.getAllFakeTransactions()
 
-    fun getAllFakeTransactions(): List<FakeTransaction> {
-        return repository.getAllFakeTransactions()
-    }
+    fun getFakeTransaction(byId: UUID): FakeTransaction = repository.getFakeTransaction(byId)
 }

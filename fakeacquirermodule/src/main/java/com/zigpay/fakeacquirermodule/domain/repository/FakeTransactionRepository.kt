@@ -8,10 +8,10 @@ class FakeTransactionRepository(private val db: FakeTransactionDAO) {
 
     fun saveFakeTransaction(fakeTransaction : FakeTransaction): FakeTransaction {
         db.insertAll(fakeTransaction)
-        return getFakeTransaction(withId = fakeTransaction.uid)
+        return getFakeTransaction(byId = fakeTransaction.uid)
     }
 
-    fun getFakeTransaction(withId: UUID): FakeTransaction = db.getById(withId)
+    fun getFakeTransaction(byId: UUID): FakeTransaction = db.getById(byId)
 
     fun getAllFakeTransactions(): List<FakeTransaction> = db.getAll()
 }

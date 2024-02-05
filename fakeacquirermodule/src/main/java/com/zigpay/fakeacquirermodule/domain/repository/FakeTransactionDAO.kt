@@ -12,7 +12,7 @@ interface FakeTransactionDAO {
     @Query("SELECT * FROM fake_transaction ORDER BY created_at DESC")
     fun getAll(): List<FakeTransaction>
 
-    @Query("SELECT * FROM fake_transaction WHERE uid IN (:uuid)")
+    @Query("SELECT * FROM fake_transaction WHERE uid = :uuid")
     fun getById(uuid: UUID): FakeTransaction
 
     @Insert

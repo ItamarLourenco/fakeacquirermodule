@@ -35,6 +35,7 @@ import com.zigpay.fakeacquirerproject.ui.theme.FakeAcquirerProjectTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.util.UUID
 import kotlin.coroutines.resume
 
 class MainActivity : ComponentActivity() {
@@ -73,12 +74,15 @@ class MainActivity : ComponentActivity() {
         })
     }
 
+    fun getTransaction(id: String): FakeTransaction = fakeAcquirerSdk.getTransactionById(id)
+
 }
 
 @Composable
 fun Greeting(rememberCoroutineScope: CoroutineScope) {
     val mainActivity: MainActivity = LocalContext.current as MainActivity
     var log by remember { mutableStateOf("") }
+    var getTransaction by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -99,6 +103,19 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
                 Text(text = "Simular transações")
             }
             Text(text = log, textAlign = TextAlign.Center, fontSize = 12.sp)
+
+            Button(
+                onClick = {
+                    getTransaction = mainActivity.getTransaction("8e22c3bd-5a85-4665-8721-4253dc46ed80").toString()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Buscar transações")
+            }
+            Text(text = getTransaction, textAlign = TextAlign.Center, fontSize = 12.sp)
         }
     }
 }
