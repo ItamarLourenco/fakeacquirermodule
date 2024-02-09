@@ -12,4 +12,6 @@ class FakeTransactionUseCase(private val repository: FakeTransactionRepository) 
     fun getAllFakeTransactions(): List<FakeTransaction> = repository.getAllFakeTransactions()
 
     fun getFakeTransaction(byId: UUID): FakeTransaction = repository.getFakeTransaction(byId)
+    fun getLastTransaction(): FakeTransaction = repository.getLastTransaction()
+
 }

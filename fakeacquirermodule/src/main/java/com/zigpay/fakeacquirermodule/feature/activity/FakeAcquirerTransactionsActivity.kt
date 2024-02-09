@@ -135,9 +135,20 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("Type: ")
+                                append("Method: ")
                             }
-                            append(fakeTransaction.type.toString())
+                            append(fakeTransaction.method.toString())
+                        },
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Status: ")
+                            }
+                            append(fakeTransaction.status.toString())
                         },
                         fontSize = 12.sp,
                         color = Color.DarkGray

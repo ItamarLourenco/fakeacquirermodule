@@ -14,4 +14,5 @@ class FakeTransactionRepository(private val db: FakeTransactionDAO) {
     fun getFakeTransaction(byId: UUID): FakeTransaction = db.getById(byId)
 
     fun getAllFakeTransactions(): List<FakeTransaction> = db.getAll()
+    fun getLastTransaction(): FakeTransaction = db.getLastTransaction()
 }

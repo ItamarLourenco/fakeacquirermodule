@@ -16,7 +16,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
-import com.zigpay.fakeacquirermodule.domain.model.ActionTransaction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionAction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionStatus
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivityBase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -29,7 +30,8 @@ class FakeAcquirerThrowableActivity : FakeAcquirerActivityBase(){
         MainScope().launch {
             delay(2000)
             val fakeTransaction = getFakeTransaction()
-            fakeTransaction.action = ActionTransaction.THROWABLE
+            fakeTransaction.action = FakeTransactionAction.THROWABLE
+            fakeTransaction.status = FakeTransactionStatus.SUCCESS
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             throw Throwable("Throwable lançado!")
             FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)

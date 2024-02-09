@@ -13,9 +13,6 @@ class FakeAcquirerApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        db = Room.databaseBuilder(applicationContext, FakeAppDatabase::class.java, "fake_acquirer")
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
+
     }
 }

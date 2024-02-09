@@ -8,7 +8,7 @@ import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionDAO
 import java.util.Date
 
-@Database(entities = [FakeTransaction::class], version = 3)
+@Database(entities = [FakeTransaction::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class FakeAppDatabase : RoomDatabase() {
     abstract fun fakeTransactionDAO(): FakeTransactionDAO

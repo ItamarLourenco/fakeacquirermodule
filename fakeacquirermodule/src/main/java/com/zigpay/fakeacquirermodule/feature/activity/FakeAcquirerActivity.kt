@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,7 +15,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -27,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
-import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerExceptionActivity
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerFailedActivity
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerLockedActivity
@@ -39,9 +34,12 @@ import java.io.Serializable
 
 class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
     companion object {
-        fun open(context: Context, price: Float, type: TypeTransaction) {
+        fun open(context: Context, price: Float, method: FakeTransactionMethod) {
             context.startActivity(Intent(context, FakeAcquirerActivity::class.java).also {
-                it.putExtra(FakeTransaction::class.java.simpleName, FakeTransaction(price, type))
+                it.putExtra(FakeTransaction::class.java.simpleName, FakeTransaction(
+                    price = price,
+                    method = method,
+                ))
             })
         }
     }

@@ -1,6 +1,6 @@
 package com.zigpay.fakeacquirermodule.domain.model
 
-enum class ActionTransaction {
+enum class FakeTransactionAction {
     SUCCESS,
     FAILED,
     WITHOUT_RETURN,

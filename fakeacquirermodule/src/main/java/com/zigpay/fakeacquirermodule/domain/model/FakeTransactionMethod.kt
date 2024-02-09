@@ -1,6 +1,6 @@
 package com.zigpay.fakeacquirermodule.domain.model
 
-enum class TypeTransaction {
+enum class FakeTransactionMethod {
     CREDIT,
     DEBIT,
 }

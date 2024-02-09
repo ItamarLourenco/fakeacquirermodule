@@ -1,12 +1,11 @@
 package com.zigpay.fakeacquirermodule.feature.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.activity.ComponentActivity
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
-import com.zigpay.fakeacquirermodule.domain.model.TypeTransaction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
 import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
 import com.zigpay.fakeacquirermodule.usecase.FakeTransactionUseCase
 
@@ -28,7 +27,7 @@ open class FakeAcquirerActivityBase: ComponentActivity() {
     )
 
     fun getFakeTransaction() : FakeTransaction = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        intent.getSerializableExtra(FakeTransaction::class.java.simpleName, FakeTransaction::class.java) ?: FakeTransaction(0f, TypeTransaction.CREDIT)
+        intent.getSerializableExtra(FakeTransaction::class.java.simpleName, FakeTransaction::class.java) ?: FakeTransaction(0f, FakeTransactionMethod.CREDIT)
     } else {
         intent.getSerializableExtra(FakeTransaction::class.java.simpleName) as FakeTransaction
     }

@@ -16,7 +16,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
-import com.zigpay.fakeacquirermodule.domain.model.ActionTransaction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionAction
+import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionStatus
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivityBase
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -30,7 +31,8 @@ class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
         MainScope().launch {
             delay(2000)
             val fakeTransaction = getFakeTransaction()
-            fakeTransaction.action = ActionTransaction.EXCEPTION
+            fakeTransaction.action = FakeTransactionAction.EXCEPTION
+            fakeTransaction.status = FakeTransactionStatus.SUCCESS
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             throw Exception("Exception lançada!")
             FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
