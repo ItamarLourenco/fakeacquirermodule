@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
+import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerCloseActivityAndSendCallbackActivity
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerExceptionActivity
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerFailedActivity
 import com.zigpay.fakeacquirermodule.feature.activity.actions.FakeAcquirerLockedActivity
@@ -90,6 +91,10 @@ class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
         FakeAcquirerTransactionsActivity.open(this)
     }
 
+    fun startFakeAcquirerTransactionsCloseActivityAndSendCallback() {
+        open(this, FakeAcquirerCloseActivityAndSendCallbackActivity::class.java, getFakeTransaction())
+    }
+
 }
 
 
@@ -122,6 +127,11 @@ fun InitView() {
         MyButton(
             "Fluxo: Travamento Activity\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerLockedActivity() },
+            ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+        ),
+        MyButton(
+            "Fluxo: Fechar Act e enviar Callback\nPagamento: Sucesso",
+            { fakeAcquirerActivity.startFakeAcquirerTransactionsCloseActivityAndSendCallback() },
             ButtonDefaults.buttonColors(containerColor = Color.LightGray)
         ),
         MyButton(

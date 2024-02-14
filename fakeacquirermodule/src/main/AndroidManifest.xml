@@ -10,6 +10,8 @@
         <activity android:name=".feature.activity.actions.FakeAcquirerWithoutReturnActivity" />
         <activity android:name=".feature.activity.actions.FakeAcquirerLockedActivity" />
         <activity android:name=".feature.activity.FakeAcquirerTransactionsActivity" />
+        <activity android:name=".feature.activity.actions.FakeAcquirerCloseActivityAndSendCallbackActivity" />
+
     </application>
 
 </manifest>

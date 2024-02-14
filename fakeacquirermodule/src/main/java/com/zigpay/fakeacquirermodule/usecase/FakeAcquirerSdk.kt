@@ -15,7 +15,9 @@ import java.io.Serializable
 import java.util.UUID
 
 class FakeAcquirerSdk(val context: Context): Serializable {
-    private var fakeTransactionUseCase:FakeTransactionUseCase
+
+    var fakeTransactionUseCase:FakeTransactionUseCase
+
     init {
         FakeAcquirerApplication.db = Room.databaseBuilder(context, FakeAppDatabase::class.java, "fake_acquirer")
             .fallbackToDestructiveMigration()
@@ -28,14 +30,13 @@ class FakeAcquirerSdk(val context: Context): Serializable {
             )
         )
     }
+
     fun getTransactionById(id: String) : FakeTransaction = getTransactionById(UUID.fromString(id))
     fun getTransactionById(id: UUID) : FakeTransaction = fakeTransactionUseCase.getFakeTransaction(id)
-
     fun makeTransaction(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
         FakeAcquirerApplication.callback = callback
         FakeAcquirerActivity.open(context, price, method);
     }
     fun getLastTransaction(): FakeTransaction? = fakeTransactionUseCase.getLastTransaction()
-
     fun showAllTransactions() = FakeAcquirerTransactionsActivity.open(context);
 }

@@ -5,6 +5,7 @@ enum class FakeTransactionAction {
     FAILED,
     WITHOUT_RETURN,
     LOCKED,
+    FINISH_FIRST_CALLBACK,
     EXCEPTION,
     THROWABLE
 }
