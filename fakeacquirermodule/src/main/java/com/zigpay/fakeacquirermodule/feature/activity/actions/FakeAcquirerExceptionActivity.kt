@@ -64,7 +64,7 @@ fun InitViewException() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com Exception", color = Color.Red)
+            Text(text = "Fluxo: Exception - Pagamento: Sucesso", color = Color.Red)
         }
     }
 }

@@ -59,7 +59,7 @@ fun InitViewLocked() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação travando na activity", color = Color.Red)
+            Text(text = "Fluxo: Travamento Activity - Pagamento: Sucesso", color = Color.Red)
         }
     }
 }

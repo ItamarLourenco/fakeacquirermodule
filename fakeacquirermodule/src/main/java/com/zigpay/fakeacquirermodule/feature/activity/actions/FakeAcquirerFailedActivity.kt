@@ -63,7 +63,7 @@ fun InitViewFailed() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com erro", color = Color.Red)
+            Text(text = "Fluxo: Sucesso - Pagamento: Error", color = Color.Red)
         }
     }
 }

@@ -60,7 +60,7 @@ fun InitViewWithoutReturn() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação sem retorno", color = Color.Red)
+            Text(text = "Fluxo: Sem retorno - Pagamento: Sucesso", color = Color.Red)
         }
     }
 }

@@ -7,7 +7,9 @@ import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
 import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
+import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepositoryImpl
 import com.zigpay.fakeacquirermodule.usecase.FakeTransactionUseCase
+import com.zigpay.fakeacquirermodule.usecase.FakeTransactionUseCaseImpl
 
 
 open class FakeAcquirerActivityBase: ComponentActivity() {
@@ -22,8 +24,8 @@ open class FakeAcquirerActivityBase: ComponentActivity() {
         }
     }
 
-    val fakeTransactionUseCase = FakeTransactionUseCase(
-        FakeTransactionRepository(FakeAcquirerApplication.db.fakeTransactionDAO())
+    val fakeTransactionUseCase:FakeTransactionUseCase = FakeTransactionUseCaseImpl(
+        FakeTransactionRepositoryImpl(FakeAcquirerApplication.db.fakeTransactionDAO())
     )
 
     fun getFakeTransaction() : FakeTransaction = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

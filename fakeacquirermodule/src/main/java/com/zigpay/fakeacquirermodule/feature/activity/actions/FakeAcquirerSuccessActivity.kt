@@ -61,7 +61,7 @@ fun InitViewSuccess() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com sucesso", color = Color.Blue)
+            Text(text = "Fluxo: Sucesso - Pagamento: Sucesso", color = Color.Blue)
         }
     }
 }

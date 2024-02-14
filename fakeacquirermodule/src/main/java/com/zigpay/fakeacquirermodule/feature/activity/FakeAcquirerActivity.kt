@@ -105,32 +105,32 @@ fun InitView() {
 
     val buttons = listOf(
         MyButton(
-            "Simular transição com sucesso",
+            "Fluxo: Sucesso\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerSuccessActivity() },
             ButtonDefaults.buttonColors()
         ),
         MyButton(
-            "Simular transição com erro",
+            "Fluxo: Sucesso\nPagamento: Error",
             { fakeAcquirerActivity.startFakeAcquirerFailedActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.LightGray)
         ),
         MyButton(
-            "Simulação sem retorno",
+            "Fluxo: Sem retorno\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerWithoutReturnActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.LightGray)
         ),
         MyButton(
-            "Simulação travado a activity",
+            "Fluxo: Travamento Activity\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerLockedActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.LightGray)
         ),
         MyButton(
-            "Lançar Exception",
+            "Fluxo: Exception\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerExceptionActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.Red)
         ),
         MyButton(
-            "Lançar Throwable",
+            "Fluxo: Throwable\nPagamento: Sucesso",
             { fakeAcquirerActivity.startFakeAcquirerThrowableActivity() },
             ButtonDefaults.buttonColors(containerColor = Color.Red)
         ),

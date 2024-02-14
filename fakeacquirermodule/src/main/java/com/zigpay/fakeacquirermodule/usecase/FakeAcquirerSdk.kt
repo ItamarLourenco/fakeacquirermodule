@@ -8,13 +8,13 @@ import com.zigpay.fakeacquirermodule.application.FakeAppDatabase
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
 import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
+import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepositoryImpl
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivity
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerTransactionsActivity
 import java.io.Serializable
 import java.util.UUID
 
 class FakeAcquirerSdk(val context: Context): Serializable {
-
     private var fakeTransactionUseCase:FakeTransactionUseCase
     init {
         FakeAcquirerApplication.db = Room.databaseBuilder(context, FakeAppDatabase::class.java, "fake_acquirer")
@@ -22,8 +22,8 @@ class FakeAcquirerSdk(val context: Context): Serializable {
             .allowMainThreadQueries()
             .build()
 
-        fakeTransactionUseCase = FakeTransactionUseCase(
-            repository = FakeTransactionRepository(
+        fakeTransactionUseCase = FakeTransactionUseCaseImpl(
+            repository = FakeTransactionRepositoryImpl(
                 db = FakeAcquirerApplication.db.fakeTransactionDAO()
             )
         )
@@ -35,10 +35,7 @@ class FakeAcquirerSdk(val context: Context): Serializable {
         FakeAcquirerApplication.callback = callback
         FakeAcquirerActivity.open(context, price, method);
     }
+    fun getLastTransaction(): FakeTransaction? = fakeTransactionUseCase.getLastTransaction()
 
-    fun getLastTransaction(): FakeTransaction = fakeTransactionUseCase.getLastTransaction()
-
-    fun showAllTransactions() {
-        FakeAcquirerTransactionsActivity.open(context);
-    }
+    fun showAllTransactions() = FakeAcquirerTransactionsActivity.open(context);
 }

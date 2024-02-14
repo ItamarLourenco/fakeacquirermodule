@@ -21,7 +21,6 @@ interface FakeTransactionDAO {
     @Delete
     fun delete(user: FakeTransaction)
 
-
     @Query("SELECT * FROM fake_transaction ORDER BY created_at DESC LIMIT 1")
-    fun getLastTransaction(): FakeTransaction
+    fun getLastTransaction(): FakeTransaction?
 }

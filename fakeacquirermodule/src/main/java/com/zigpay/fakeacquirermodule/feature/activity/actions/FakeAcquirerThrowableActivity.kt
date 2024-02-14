@@ -63,7 +63,7 @@ fun InitViewThrowable() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Text(text = "Simulando transação com Throwable", color = Color.Red)
+            Text(text = "Fluxo: Throwable - Pagamento: Sucesso", color = Color.Red)
         }
     }
 }
