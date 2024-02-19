@@ -57,6 +57,16 @@ class FakeAcquirerSdk(val context: Context): Serializable {
     fun makeTransactionWithoutActivityException(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
         MainScope().launch {
             delay(3000)
+            callback.transactionSuccess(
+                fakeTransactionUseCase.saveFakeTransaction(
+                    FakeTransaction(
+                        action = FakeTransactionAction.EXCEPTION,
+                        status = FakeTransactionStatus.SUCCESS,
+                        price = price,
+                        method = method,
+                    )
+                )
+            )
             throw Exception("Ocorreu um erro - Exception")
         }
     }
@@ -64,6 +74,16 @@ class FakeAcquirerSdk(val context: Context): Serializable {
     fun makeTransactionWithoutActivityThrowable(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
         MainScope().launch {
             delay(3000)
+            callback.transactionSuccess(
+                fakeTransactionUseCase.saveFakeTransaction(
+                    FakeTransaction(
+                        action = FakeTransactionAction.THROWABLE,
+                        status = FakeTransactionStatus.SUCCESS,
+                        price = price,
+                        method = method,
+                    )
+                )
+            )
             throw Throwable("Ocorreu um erro - Throwable")
         }
     }
