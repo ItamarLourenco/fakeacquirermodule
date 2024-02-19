@@ -20,16 +20,18 @@ data class FakeTransaction(
 ): Serializable {
     constructor(price: Float,
                 action: FakeTransactionAction,
-                statusTransaction: FakeTransactionStatus,
+                status: FakeTransactionStatus,
                 method: FakeTransactionMethod) : this(
         uid = UUID.randomUUID(),
         price = price,
         action = action,
-        status = statusTransaction,
+        status = status,
         method = method,
         created_at = Date(),
         updated_at = Date()
     )
+
+
 
     constructor(price: Float,
                 method: FakeTransactionMethod) : this(

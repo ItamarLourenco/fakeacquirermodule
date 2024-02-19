@@ -7,5 +7,6 @@ enum class FakeTransactionAction {
     LOCKED,
     FINISH_FIRST_CALLBACK,
     EXCEPTION,
-    THROWABLE
+    THROWABLE,
+    WITHOUT_ACTIVITY
 }

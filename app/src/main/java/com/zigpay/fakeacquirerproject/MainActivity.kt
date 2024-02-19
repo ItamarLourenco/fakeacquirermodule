@@ -31,9 +31,11 @@ import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerCallback
 import com.zigpay.fakeacquirermodule.usecase.FakeAcquirerSdk
 import com.zigpay.fakeacquirerproject.ui.theme.FakeAcquirerProjectTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import androidx.compose.ui.Alignment
 
 class MainActivity : ComponentActivity() {
 
@@ -71,8 +73,8 @@ class MainActivity : ComponentActivity() {
         })
     }
 
-    suspend fun makeTransactionWithoutActivity(): FakeTransaction? = suspendCancellableCoroutine { continuation ->
-        fakeAcquirerSdk.makeTransaction(200f, FakeTransactionMethod.DEBIT, object: FakeAcquirerCallback {
+    suspend fun makeTransactionWithoutActivity(success: Boolean = true): FakeTransaction? = suspendCancellableCoroutine { continuation ->
+        val fakeAcquirerCallback = object: FakeAcquirerCallback {
             override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
                 Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
@@ -82,8 +84,16 @@ class MainActivity : ComponentActivity() {
                 Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
             }
-        })
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            when(success) {
+                true -> fakeAcquirerSdk.makeTransactionWithoutActivitySuccess(200f, FakeTransactionMethod.DEBIT, fakeAcquirerCallback)
+                false -> fakeAcquirerSdk.makeTransactionWithoutActivityFailed(200f, FakeTransactionMethod.DEBIT, fakeAcquirerCallback)
+            }
+        }
     }
+
+
     fun getTransaction(id: String): FakeTransaction? = fakeAcquirerSdk.getTransactionById(id)
 
     fun showAllTransactions() = fakeAcquirerSdk.showAllTransactions()
@@ -94,7 +104,8 @@ class MainActivity : ComponentActivity() {
 fun Greeting(rememberCoroutineScope: CoroutineScope) {
     val mainActivity: MainActivity = LocalContext.current as MainActivity
     var log by remember { mutableStateOf("") }
-    var logWithoutActivity by remember { mutableStateOf("") }
+    var logWithoutActivitySuccess by remember { mutableStateOf("") }
+    var logWithoutActivityFailed by remember { mutableStateOf("") }
     var getTransaction by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
@@ -122,8 +133,9 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
 
             Button(
                 onClick = {
+                    logWithoutActivitySuccess = "Fazendo transação"
                     rememberCoroutineScope.launch {
-                        logWithoutActivity = mainActivity.makeTransactionWithoutActivity().toString()
+                        logWithoutActivitySuccess = mainActivity.makeTransactionWithoutActivity().toString()
                     }
                 },
                 modifier = Modifier
@@ -131,9 +143,27 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
                     .height(80.dp)
                     .padding(16.dp)
             ) {
-                Text(text = "Simular transações sem activity")
+                Text(text = "Simular sem activity - Success")
             }
-            Text(text = logWithoutActivity, textAlign = TextAlign.Center, fontSize = 12.sp)
+            Text(text = logWithoutActivitySuccess, textAlign = TextAlign.Center, fontSize = 12.sp)
+
+            Button(
+                onClick = {
+                    logWithoutActivityFailed = "Fazendo transação"
+                    rememberCoroutineScope.launch {
+                        logWithoutActivityFailed = mainActivity.makeTransactionWithoutActivity(
+                            success = false
+                        ).toString()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Simular sem activity - Failed")
+            }
+            Text(text = logWithoutActivityFailed, textAlign = TextAlign.Center, fontSize = 12.sp)
 
             Button(
                 onClick = {
