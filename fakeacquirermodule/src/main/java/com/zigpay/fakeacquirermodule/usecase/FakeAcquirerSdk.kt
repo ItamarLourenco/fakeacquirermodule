@@ -64,7 +64,7 @@ class FakeAcquirerSdk(val context: Context): Serializable {
     fun makeTransactionWithoutActivityThrowable(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
         MainScope().launch {
             delay(3000)
-            throw Throwable("Ocorreu um erro - Exception")
+            throw Throwable("Ocorreu um erro - Throwable")
         }
     }
 
