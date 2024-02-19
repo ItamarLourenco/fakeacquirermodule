@@ -109,7 +109,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         .padding(0.dp)
                         .fillMaxWidth()
                 ) {
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -120,7 +120,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -131,7 +131,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -142,7 +142,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -153,7 +153,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -164,7 +164,7 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -177,8 +177,6 @@ fun InitViewList(fakeTransactionList: List<FakeTransaction>) {
                         fontSize = 12.sp,
                         color = Color.DarkGray
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-
                 }
             }
         }

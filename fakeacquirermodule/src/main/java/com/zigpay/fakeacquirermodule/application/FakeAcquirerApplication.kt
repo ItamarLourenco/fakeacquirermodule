@@ -10,5 +10,13 @@ class FakeAcquirerApplication: Application() {
     companion object    {
         lateinit var callback: FakeAcquirerCallback
         lateinit var db: FakeAppDatabase
+
+        fun initDB(context: Context) {
+            db = Room.databaseBuilder(context, FakeAppDatabase::class.java, "fake_acquirer")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
+        }
+
     }
 }

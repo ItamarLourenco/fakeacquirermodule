@@ -13,7 +13,7 @@ interface FakeTransactionDAO {
     fun getAll(): List<FakeTransaction>
 
     @Query("SELECT * FROM fake_transaction WHERE uid = :uuid")
-    fun getById(uuid: UUID): FakeTransaction
+    fun getById(uuid: UUID): FakeTransaction?
 
     @Insert
     fun insertAll(vararg users: FakeTransaction)

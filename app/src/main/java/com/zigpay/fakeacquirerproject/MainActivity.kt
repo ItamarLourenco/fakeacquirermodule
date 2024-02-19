@@ -71,7 +71,20 @@ class MainActivity : ComponentActivity() {
         })
     }
 
-    fun getTransaction(id: String): FakeTransaction = fakeAcquirerSdk.getTransactionById(id)
+    suspend fun makeTransactionWithoutActivity(): FakeTransaction? = suspendCancellableCoroutine { continuation ->
+        fakeAcquirerSdk.makeTransaction(200f, FakeTransactionMethod.DEBIT, object: FakeAcquirerCallback {
+            override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
+                Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
+                continuation.resume(fakeAcquirerResponse)
+            }
+
+            override fun transactionFailed(fakeAcquirerResponse: FakeTransaction?) {
+                Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
+                continuation.resume(fakeAcquirerResponse)
+            }
+        })
+    }
+    fun getTransaction(id: String): FakeTransaction? = fakeAcquirerSdk.getTransactionById(id)
 
     fun showAllTransactions() = fakeAcquirerSdk.showAllTransactions()
 
@@ -81,6 +94,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(rememberCoroutineScope: CoroutineScope) {
     val mainActivity: MainActivity = LocalContext.current as MainActivity
     var log by remember { mutableStateOf("") }
+    var logWithoutActivity by remember { mutableStateOf("") }
     var getTransaction by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
@@ -91,7 +105,10 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
             Button(
                 onClick = {
                     rememberCoroutineScope.launch {
-                        log = mainActivity.makeTransaction().toString()
+                        val fakeTransaction = mainActivity.makeTransaction()
+                        if(fakeTransaction != null){
+                            log = fakeTransaction.toString()
+                        }
                     }
                 },
                 modifier = Modifier
@@ -105,7 +122,24 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
 
             Button(
                 onClick = {
-                    getTransaction = mainActivity.getTransaction("8e22c3bd-5a85-4665-8721-4253dc46ed80").toString()
+                    rememberCoroutineScope.launch {
+                        logWithoutActivity = mainActivity.makeTransactionWithoutActivity().toString()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Simular transações sem activity")
+            }
+            Text(text = logWithoutActivity, textAlign = TextAlign.Center, fontSize = 12.sp)
+
+            Button(
+                onClick = {
+                    mainActivity.getTransaction("8e22c3bd-5a85-4665-8721-4253dc46ed80").let {
+                        getTransaction = it.toString()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

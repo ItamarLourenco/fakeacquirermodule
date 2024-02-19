@@ -19,11 +19,7 @@ class FakeAcquirerSdk(val context: Context): Serializable {
     var fakeTransactionUseCase:FakeTransactionUseCase
 
     init {
-        FakeAcquirerApplication.db = Room.databaseBuilder(context, FakeAppDatabase::class.java, "fake_acquirer")
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
-
+        FakeAcquirerApplication.initDB(context)
         fakeTransactionUseCase = FakeTransactionUseCaseImpl(
             repository = FakeTransactionRepositoryImpl(
                 db = FakeAcquirerApplication.db.fakeTransactionDAO()
@@ -31,8 +27,8 @@ class FakeAcquirerSdk(val context: Context): Serializable {
         )
     }
 
-    fun getTransactionById(id: String) : FakeTransaction = getTransactionById(UUID.fromString(id))
-    fun getTransactionById(id: UUID) : FakeTransaction = fakeTransactionUseCase.getFakeTransaction(id)
+    fun getTransactionById(id: String) : FakeTransaction? = getTransactionById(UUID.fromString(id))
+    fun getTransactionById(id: UUID) : FakeTransaction? = fakeTransactionUseCase.getFakeTransaction(id)
     fun makeTransaction(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
         FakeAcquirerApplication.callback = callback
         FakeAcquirerActivity.open(context, price, method);
