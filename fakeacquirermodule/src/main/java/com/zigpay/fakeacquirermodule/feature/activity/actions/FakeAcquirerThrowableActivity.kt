@@ -34,7 +34,7 @@ class FakeAcquirerThrowableActivity : FakeAcquirerActivityBase(){
             fakeTransaction.status = FakeTransactionStatus.SUCCESS
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             throw Throwable("Throwable lançado!")
-            FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
+            FakeAcquirerApplication.listener.transactionSuccess(fakeTransaction)
             finish()
         }
 

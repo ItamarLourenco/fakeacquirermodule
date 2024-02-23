@@ -35,7 +35,7 @@ class FakeAcquirerCloseActivityAndSendCallbackActivity : FakeAcquirerActivityBas
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             finish()
             delay(5000)
-            FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
+            FakeAcquirerApplication.listener.transactionSuccess(fakeTransaction)
         }
 
         setContent {

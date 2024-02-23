@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
-import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerCallback
+import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerListener
 import com.zigpay.fakeacquirermodule.usecase.FakeAcquirerSdk
 import com.zigpay.fakeacquirerproject.ui.theme.FakeAcquirerProjectTheme
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import androidx.compose.ui.Alignment
+import kotlin.coroutines.suspendCoroutine
 
 class MainActivity : ComponentActivity() {
 
@@ -58,9 +60,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     suspend fun makeTransaction(): FakeTransaction? = suspendCancellableCoroutine { continuation ->
-        fakeAcquirerSdk.makeTransaction(200f, FakeTransactionMethod.DEBIT, object: FakeAcquirerCallback {
+        fakeAcquirerSdk.modeActivity.makeTransaction("reference_id",200f, FakeTransactionMethod.DEBIT, object: FakeAcquirerListener {
             override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
                 Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
@@ -73,8 +74,8 @@ class MainActivity : ComponentActivity() {
         })
     }
 
-    suspend fun makeTransactionWithoutActivity(success: Boolean = true): FakeTransaction? = suspendCancellableCoroutine { continuation ->
-        val fakeAcquirerCallback = object: FakeAcquirerCallback {
+    suspend fun makeTransactionWithoutActivity(success: Boolean = true): FakeTransaction? = suspendCoroutine { continuation ->
+        val listener = object: FakeAcquirerListener {
             override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
                 Log.i("FAKE_DEBUG", fakeAcquirerResponse.toString())
                 continuation.resume(fakeAcquirerResponse)
@@ -87,16 +88,27 @@ class MainActivity : ComponentActivity() {
         }
         CoroutineScope(Dispatchers.Main).launch {
             when(success) {
-                true -> fakeAcquirerSdk.makeTransactionWithoutActivitySuccess(200f, FakeTransactionMethod.DEBIT, fakeAcquirerCallback)
-                false -> fakeAcquirerSdk.makeTransactionWithoutActivityFailed(200f, FakeTransactionMethod.DEBIT, fakeAcquirerCallback)
+                true -> fakeAcquirerSdk.modeCallback.makeTransactionWithoutActivitySuccess("reference_id", 200f, FakeTransactionMethod.DEBIT, listener)
+                false -> fakeAcquirerSdk.modeCallback.makeTransactionWithoutActivityFailed("reference_id", 200f, FakeTransactionMethod.DEBIT, listener)
             }
         }
     }
 
+    suspend fun getTransactionByActivity(referenceId: String) = suspendCoroutine { continuation ->
+        fakeAcquirerSdk.modeActivity.getTransactionByReferenceId(referenceId, object: FakeAcquirerListener {
+            override fun transactionSuccess(fakeAcquirerResponse: FakeTransaction?) {
+                continuation.resume(fakeAcquirerResponse)
+            }
 
-    fun getTransaction(id: String): FakeTransaction? = fakeAcquirerSdk.getTransactionById(id)
+            override fun transactionFailed(fakeAcquirerResponse: FakeTransaction?) {
+                continuation.resume(fakeAcquirerResponse)
+            }
+        })
+    }
+
 
     fun showAllTransactions() = fakeAcquirerSdk.showAllTransactions()
+    fun getTransaction(id: String): FakeTransaction? = fakeAcquirerSdk.modeCallback.getTransactionByReferenceId(id)
 
 }
 
@@ -106,13 +118,17 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
     var log by remember { mutableStateOf("") }
     var logWithoutActivitySuccess by remember { mutableStateOf("") }
     var logWithoutActivityFailed by remember { mutableStateOf("") }
+    var logReferenceIdByActivity by remember { mutableStateOf("") }
     var getTransaction by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Column {
+        Column (
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
             Button(
                 onClick = {
                     rememberCoroutineScope.launch {
@@ -167,7 +183,7 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
 
             Button(
                 onClick = {
-                    mainActivity.getTransaction("8e22c3bd-5a85-4665-8721-4253dc46ed80").let {
+                    mainActivity.getTransaction("reference_id").let {
                         getTransaction = it.toString()
                     }
                 },
@@ -179,6 +195,23 @@ fun Greeting(rememberCoroutineScope: CoroutineScope) {
                 Text(text = "Buscar transações")
             }
             Text(text = getTransaction, textAlign = TextAlign.Center, fontSize = 12.sp)
+
+            Button(
+                onClick = {
+                    rememberCoroutineScope.launch {
+                        mainActivity.getTransactionByActivity("reference_id").let {
+                            logReferenceIdByActivity = it.toString()
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Buscar transações por activity")
+            }
+            Text(text = logReferenceIdByActivity, textAlign = TextAlign.Center, fontSize = 12.sp)
 
             Button(
                 onClick = {

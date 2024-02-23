@@ -8,7 +8,7 @@ import java.util.UUID
 interface FakeTransactionUseCase{
     fun saveFakeTransaction(fakeTransaction : FakeTransaction): FakeTransaction?
     fun getAllFakeTransactions(): List<FakeTransaction>
-    fun getFakeTransaction(byId: UUID): FakeTransaction?
+    fun getTransactionByReferenceId(byId: String): FakeTransaction?
     fun getLastTransaction(): FakeTransaction?
 }
 
@@ -18,6 +18,6 @@ class FakeTransactionUseCaseImpl(private val repository: FakeTransactionReposito
         fakeTransaction = fakeTransaction
     )
     override fun getAllFakeTransactions(): List<FakeTransaction> = repository.getAllFakeTransactions()
-    override fun getFakeTransaction(byId: UUID): FakeTransaction? = repository.getFakeTransaction(byId)
+    override fun getTransactionByReferenceId(byId: String): FakeTransaction? = repository.getByReferenceId(byId)
     override fun getLastTransaction(): FakeTransaction? = repository.getLastTransaction()
 }

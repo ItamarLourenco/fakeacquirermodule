@@ -35,9 +35,10 @@ import java.io.Serializable
 
 class FakeAcquirerActivity : FakeAcquirerActivityBase(), Serializable {
     companion object {
-        fun open(context: Context, price: Float, method: FakeTransactionMethod) {
+        fun open(context: Context, referenceId:String, price: Float, method: FakeTransactionMethod) {
             context.startActivity(Intent(context, FakeAcquirerActivity::class.java).also {
                 it.putExtra(FakeTransaction::class.java.simpleName, FakeTransaction(
+                    referenceId = referenceId,
                     price = price,
                     method = method,
                 ))

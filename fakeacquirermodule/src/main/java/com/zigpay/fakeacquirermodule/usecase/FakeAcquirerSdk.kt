@@ -1,15 +1,12 @@
 package com.zigpay.fakeacquirermodule.usecase
 
 import android.content.Context
-import androidx.room.Room
-import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerCallback
+import com.zigpay.fakeacquirermodule.domain.repository.FakeAcquirerListener
 import com.zigpay.fakeacquirermodule.application.FakeAcquirerApplication
-import com.zigpay.fakeacquirermodule.application.FakeAppDatabase
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransaction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionAction
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionMethod
 import com.zigpay.fakeacquirermodule.domain.model.FakeTransactionStatus
-import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepository
 import com.zigpay.fakeacquirermodule.domain.repository.FakeTransactionRepositoryImpl
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerActivity
 import com.zigpay.fakeacquirermodule.feature.activity.FakeAcquirerTransactionsActivity
@@ -17,11 +14,10 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Serializable
-import java.util.UUID
 
-class FakeAcquirerSdk(val context: Context): Serializable {
+class FakeAcquirerSdk(private val context: Context): Serializable {
 
-    var fakeTransactionUseCase: FakeTransactionUseCase
+    private var fakeTransactionUseCase: FakeTransactionUseCase
 
     init {
         FakeAcquirerApplication.initDB(context)
@@ -32,77 +28,11 @@ class FakeAcquirerSdk(val context: Context): Serializable {
         )
     }
 
-    fun getTransactionById(id: String) : FakeTransaction? = getTransactionById(UUID.fromString(id))
-    fun getTransactionById(id: UUID) : FakeTransaction? = fakeTransactionUseCase.getFakeTransaction(id)
-    fun makeTransaction(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
-        FakeAcquirerApplication.callback = callback
-        FakeAcquirerActivity.open(context, price, method);
-    }
-    fun makeTransactionWithoutActivitySuccess(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
-        MainScope().launch {
-            delay(3000)
-            callback.transactionSuccess(
-                fakeTransactionUseCase.saveFakeTransaction(
-                    FakeTransaction(
-                        action = FakeTransactionAction.WITHOUT_ACTIVITY,
-                        status = FakeTransactionStatus.SUCCESS,
-                        price = price,
-                        method = method,
-                    )
-                )
-            )
-        }
-    }
+    var modeActivity = FakeAcquirerModeActivity(context)
+    var modeCallback = FakeAcquirerModeCallback(
+        context = context,
+        fakeTransactionUseCase = fakeTransactionUseCase
+    )
 
-    fun makeTransactionWithoutActivityException(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
-        MainScope().launch {
-            delay(3000)
-            callback.transactionSuccess(
-                fakeTransactionUseCase.saveFakeTransaction(
-                    FakeTransaction(
-                        action = FakeTransactionAction.EXCEPTION,
-                        status = FakeTransactionStatus.SUCCESS,
-                        price = price,
-                        method = method,
-                    )
-                )
-            )
-            throw Exception("Ocorreu um erro - Exception")
-        }
-    }
-
-    fun makeTransactionWithoutActivityThrowable(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
-        MainScope().launch {
-            delay(3000)
-            callback.transactionSuccess(
-                fakeTransactionUseCase.saveFakeTransaction(
-                    FakeTransaction(
-                        action = FakeTransactionAction.THROWABLE,
-                        status = FakeTransactionStatus.SUCCESS,
-                        price = price,
-                        method = method,
-                    )
-                )
-            )
-            throw Throwable("Ocorreu um erro - Throwable")
-        }
-    }
-
-    fun makeTransactionWithoutActivityFailed(price:Float, method: FakeTransactionMethod, callback: FakeAcquirerCallback) {
-        MainScope().launch {
-            delay(3000)
-            callback.transactionFailed(
-                fakeTransactionUseCase.saveFakeTransaction(
-                    FakeTransaction(
-                        action = FakeTransactionAction.WITHOUT_ACTIVITY,
-                        status = FakeTransactionStatus.FAILED,
-                        price = price,
-                        method = method,
-                    )
-                )
-            )
-        }
-    }
-    fun getLastTransaction(): FakeTransaction? = fakeTransactionUseCase.getLastTransaction()
     fun showAllTransactions() = FakeAcquirerTransactionsActivity.open(context);
 }

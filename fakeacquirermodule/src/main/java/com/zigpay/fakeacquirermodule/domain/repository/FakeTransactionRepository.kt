@@ -6,8 +6,8 @@ import java.util.UUID
 
 interface FakeTransactionRepository{
     fun saveFakeTransaction(fakeTransaction : FakeTransaction): FakeTransaction?
-
     fun getFakeTransaction(byId: UUID): FakeTransaction?
+    fun getByReferenceId(byId: String): FakeTransaction?
 
     fun getAllFakeTransactions(): List<FakeTransaction>
     fun getLastTransaction(): FakeTransaction?
@@ -19,6 +19,7 @@ class FakeTransactionRepositoryImpl(private val db: FakeTransactionDAO): FakeTra
         return getFakeTransaction(byId = fakeTransaction.uid)
     }
     override fun getFakeTransaction(byId: UUID): FakeTransaction? = db.getById(byId)
+    override fun getByReferenceId(byId: String): FakeTransaction? = db.getByReferenceId(byId)
 
     override fun getAllFakeTransactions(): List<FakeTransaction> = db.getAll()
     override fun getLastTransaction(): FakeTransaction? = db.getLastTransaction()

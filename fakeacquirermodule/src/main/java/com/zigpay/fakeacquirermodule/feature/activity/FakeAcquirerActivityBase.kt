@@ -29,8 +29,14 @@ open class FakeAcquirerActivityBase: ComponentActivity() {
     )
 
     fun getFakeTransaction() : FakeTransaction = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        intent.getSerializableExtra(FakeTransaction::class.java.simpleName, FakeTransaction::class.java) ?: FakeTransaction(0f, FakeTransactionMethod.CREDIT)
+        intent.getSerializableExtra(FakeTransaction::class.java.simpleName, FakeTransaction::class.java) ?: FakeTransaction(
+            referenceId = "",
+            price = 0f,
+            method = FakeTransactionMethod.CREDIT
+        )
     } else {
         intent.getSerializableExtra(FakeTransaction::class.java.simpleName) as FakeTransaction
     }
+
+    fun getReferenceId() : String = intent.getStringExtra("reference_id") ?: ""
 }

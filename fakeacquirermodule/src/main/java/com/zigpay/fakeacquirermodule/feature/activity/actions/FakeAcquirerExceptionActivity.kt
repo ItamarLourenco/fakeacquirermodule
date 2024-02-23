@@ -35,7 +35,7 @@ class FakeAcquirerExceptionActivity : FakeAcquirerActivityBase(){
             fakeTransaction.status = FakeTransactionStatus.SUCCESS
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
             throw Exception("Exception lançada!")
-            FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
+            FakeAcquirerApplication.listener.transactionSuccess(fakeTransaction)
             finish()
         }
 

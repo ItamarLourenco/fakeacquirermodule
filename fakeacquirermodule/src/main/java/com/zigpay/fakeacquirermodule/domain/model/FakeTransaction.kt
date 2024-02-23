@@ -15,10 +15,12 @@ data class FakeTransaction(
     @ColumnInfo(name = "action") var action: FakeTransactionAction,
     @ColumnInfo(name = "status") var status: FakeTransactionStatus,
     @ColumnInfo(name = "method") val method: FakeTransactionMethod,
+    @ColumnInfo(name = "reference_id") val reference_id: String,
     @ColumnInfo(name = "created_at") val created_at: Date,
     @ColumnInfo(name = "updated_at") val updated_at: Date
 ): Serializable {
     constructor(price: Float,
+                referenceId: String,
                 action: FakeTransactionAction,
                 status: FakeTransactionStatus,
                 method: FakeTransactionMethod) : this(
@@ -27,6 +29,7 @@ data class FakeTransaction(
         action = action,
         status = status,
         method = method,
+        reference_id = referenceId,
         created_at = Date(),
         updated_at = Date()
     )
@@ -34,12 +37,14 @@ data class FakeTransaction(
 
 
     constructor(price: Float,
+                referenceId: String,
                 method: FakeTransactionMethod) : this(
         uid = UUID.randomUUID(),
         price = price,
         action = FakeTransactionAction.SUCCESS,
         status = FakeTransactionStatus.SUCCESS,
         method = method,
+        reference_id = referenceId,
         created_at = Date(),
         updated_at = Date()
     )

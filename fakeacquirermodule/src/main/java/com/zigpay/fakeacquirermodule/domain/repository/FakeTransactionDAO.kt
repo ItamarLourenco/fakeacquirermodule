@@ -15,6 +15,9 @@ interface FakeTransactionDAO {
     @Query("SELECT * FROM fake_transaction WHERE uid = :uuid")
     fun getById(uuid: UUID): FakeTransaction?
 
+    @Query("SELECT * FROM fake_transaction WHERE reference_id = :referenceId")
+    fun getByReferenceId(referenceId: String): FakeTransaction?
+
     @Insert
     fun insertAll(vararg users: FakeTransaction)
 

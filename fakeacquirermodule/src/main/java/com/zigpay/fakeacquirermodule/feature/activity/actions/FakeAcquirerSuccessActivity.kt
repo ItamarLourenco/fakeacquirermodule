@@ -32,7 +32,7 @@ class FakeAcquirerSuccessActivity : FakeAcquirerActivityBase(){
             fakeTransaction.action = FakeTransactionAction.SUCCESS
             fakeTransaction.status = FakeTransactionStatus.SUCCESS
             fakeTransactionUseCase.saveFakeTransaction(fakeTransaction)
-            FakeAcquirerApplication.callback.transactionSuccess(fakeTransaction)
+            FakeAcquirerApplication.listener.transactionSuccess(fakeTransaction)
             finish()
         }
 
